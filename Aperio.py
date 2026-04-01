@@ -1,6 +1,18 @@
 import hashlib
 
 
+def welcome():
+    print("""  ___                  _       
+ / _ \                (_)      
+/ /_\ \_ __   ___ _ __ _  ___  
+|  _  | '_ \ / _ \ '__| |/ _ \ 
+| | | | |_) |  __/ |  | | (_) |
+\_| |_/ .__/ \___|_|  |_|\___/ 
+      | |                      
+      |_|                      """)
+    print(("="*40)+"\nCurrent hashes available\n")
+    print("MD5 | SHA-1")
+
 def hash_password(password: str, algorithm: str) -> str:
     if algorithm == "md5":
         return hashlib.md5(password.encode()).hexdigest()
@@ -27,6 +39,8 @@ def crack_hash(target_hash: str, wordlist_path: str, algorithm: str) -> str | No
 
 
 def main():
+    welcome()
+
     target_hash = input("Enter hash: ").strip()
     algorithm = input("Enter algorithm (md5 / sha1): ").strip().lower()
     wordlist_path = input("Enter wordlist path: ").strip()

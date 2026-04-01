@@ -11,18 +11,23 @@ def welcome():
       | |                      
       |_|                      """)
     print(("="*40)+"\nCurrent hashes available\n")
-    print("MD5 | SHA-1")
+    print("MD5 | SHA-1 | SHA-256 | SHA-512")
 
-def hash_password(password: str, algorithm: str) -> str:
+
+def hash_password(password, algorithm):
     if algorithm == "md5":
         return hashlib.md5(password.encode()).hexdigest()
     elif algorithm == "sha1":
         return hashlib.sha1(password.encode()).hexdigest()
+    elif algorithm == "sha256":
+        return hashlib.sha256(password.encode()).hexdigest()
+    elif algorithm == "sha512":
+        return hashlib.sha512(password.encode()).hexdigest()
     else:
         raise ValueError(f"Unsupported algorithm: {algorithm}")
 
 
-def crack_hash(target_hash: str, wordlist_path: str, algorithm: str) -> str | None:
+def crack_hash(target_hash, wordlist_path, algorithm):
     try:
         with open(wordlist_path, "r", encoding="utf-8", errors="ignore") as f:
             for line in f:
@@ -42,7 +47,7 @@ def main():
     welcome()
 
     target_hash = input("Enter hash: ").strip()
-    algorithm = input("Enter algorithm (md5 / sha1): ").strip().lower()
+    algorithm = input("Enter algorithm (md5 / sha1 / sha256 / sha512): ").strip().lower()
     wordlist_path = input("Enter wordlist path: ").strip()
 
     print(f"\nStarting crack with algorithm: {algorithm}")

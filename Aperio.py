@@ -1,34 +1,47 @@
-from cracker import crack_hash
+import argparse
+from cracker import crack_hash, HASHLIB_ALGORITHMS, CRYPT_ALGORITHMS
 
-HASHLIB_LIST = "md5 / sha1 / sha224 / sha256 / sha512 / sha3_256 / sha3_512 / blake2b / blake2s"
-CRYPT_LIST = "bcrypt / md5crypt / sha256crypt / sha512crypt / argon2 / ntlm / pbkdf2_sha256 / pbkdf2_sha512"
+ALL_ALGORITHMS = HASHLIB_ALGORITHMS | CRYPT_ALGORITHMS
 
 
-def welcome():
-    print("""  ___                  _       
- / _ \                (_)      
-/ /_\ \_ __   ___ _ __ _  ___  
-|  _  | '_ \ / _ \ '__| |/ _ \ 
-| | | | |_) |  __/ |  | | (_) |
-\_| |_/ .__/ \___|_|  |_|\___/ 
-      | |                      
-      |_|                      """)
-    print(("=" * 40) + "\nCurrent hashes available\n")
-    print(f"[hashlib]  {HASHLIB_LIST}")
-    print(f"[crypt]    {CRYPT_LIST}")
-    print("=" * 40)
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog="aperio",
+        description="Hash cracker using wordlist-based bruteforce"
+    )
+
+    parser.add_argument(
+        "-H", "--hash",
+        required=True,
+        help="Target hash to crack"
+    )
+
+    parser.add_argument(
+        "-a", "--algorithm",
+        required=True,
+        choices=ALL_ALGORITHMS,
+        metavar="ALGORITHM",
+        help=f"Hashing algorithm to use. Available: {', '.join(sorted(ALL_ALGORITHMS))}"
+    )
+
+    parser.add_argument(
+        "-w", "--wordlist",
+        required=True,
+        help="Path to wordlist file"
+    )
+
+    return parser.parse_args()
 
 
 def main():
-    welcome()
+    args = parse_args()
 
-    target_hash = input("Enter hash: ").strip()
-    algorithm = input("Enter algorithm: ").strip().lower()
-    wordlist_path = input("Enter wordlist path: ").strip()
+    print(f"Hash:      {args.hash}")
+    print(f"Algorithm: {args.algorithm}")
+    print(f"Wordlist:  {args.wordlist}")
+    print(f"\nStarting crack...\n")
 
-    print(f"\nStarting crack with algorithm: {algorithm}")
-
-    result = crack_hash(target_hash, wordlist_path, algorithm)
+    result = crack_hash(args.hash, args.wordlist, args.algorithm)
 
     if result:
         print(f"Password found: {result}")

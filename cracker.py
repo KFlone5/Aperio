@@ -27,7 +27,9 @@ def crack_hash(target_hash, wordlist_path, algorithm):
                 password = line.strip()
                 if not password:
                     continue
+                print(f"Trying: {password:<30}", end="\r")
                 if verify_password(password, target_hash, algorithm):
+                    print(" " * 50, end="\r")
                     return password
     except FileNotFoundError:
         print(f"Wordlist file not found: {wordlist_path}")

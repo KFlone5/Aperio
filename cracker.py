@@ -1,7 +1,14 @@
-    from algorithms import hashlib_algos, crypt_algos
+from algorithms import hashlib_algos, crypt_algos
 
-HASHLIB_ALGORITHMS = {"md5", "sha1", "sha256", "sha512"}
-CRYPT_ALGORITHMS = {"bcrypt", "md5crypt", "sha256crypt", "sha512crypt", "argon2"}
+HASHLIB_ALGORITHMS = {
+    "md5", "sha1", "sha224", "sha256", "sha512",
+    "sha3_256", "sha3_512", "blake2b", "blake2s"
+}
+
+CRYPT_ALGORITHMS = {
+    "bcrypt", "md5crypt", "sha256crypt", "sha512crypt",
+    "argon2", "ntlm", "pbkdf2_sha256", "pbkdf2_sha512"
+}
 
 
 def verify_password(password, target_hash, algorithm):

@@ -1,6 +1,7 @@
 from cracker import crack_hash
 
-ALGORITHMS = "md5 / sha1 / sha256 / sha512 / bcrypt / md5crypt / sha256crypt / sha512crypt / argon2"
+HASHLIB_LIST = "md5 / sha1 / sha224 / sha256 / sha512 / sha3_256 / sha3_512 / blake2b / blake2s"
+CRYPT_LIST = "bcrypt / md5crypt / sha256crypt / sha512crypt / argon2 / ntlm / pbkdf2_sha256 / pbkdf2_sha512"
 
 
 def welcome():
@@ -13,15 +14,16 @@ def welcome():
       | |                      
       |_|                      """)
     print(("=" * 40) + "\nCurrent hashes available\n")
-    print("MD5 | SHA-1 | SHA-256 | SHA-512")
-    print("bcrypt | md5crypt | sha256crypt | sha512crypt | argon2")
+    print(f"[hashlib]  {HASHLIB_LIST}")
+    print(f"[crypt]    {CRYPT_LIST}")
+    print("=" * 40)
 
 
 def main():
     welcome()
 
     target_hash = input("Enter hash: ").strip()
-    algorithm = input(f"Enter algorithm ({ALGORITHMS}): ").strip().lower()
+    algorithm = input("Enter algorithm: ").strip().lower()
     wordlist_path = input("Enter wordlist path: ").strip()
 
     print(f"\nStarting crack with algorithm: {algorithm}")

@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ## Usage
 
 ```
-python main.py -H <hash> -a <algorithm> -w <wordlist>
+python main.py -H <hash> -a <algorithm> -w <wordlist> -p <pattern>
 ```
 
 ### Arguments
@@ -27,6 +27,7 @@ python main.py -H <hash> -a <algorithm> -w <wordlist>
 | `-H`, `--hash` | Target hash to crack |
 | `-a`, `--algorithm` | Hashing algorithm used |
 | `-w`, `--wordlist` | Path to wordlist file |
+| `-p`, `--pattern` | Pattern for the password on-the-fly generation |
 
 ### Examples
 
@@ -36,6 +37,10 @@ python main.py -H 5f4dcc3b5aa765d61d8327deb882cf99 -a md5 -w /usr/share/wordlist
 
 ```
 python main.py -H 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 -a sha1 -w wordlist.txt
+```
+
+```
+python main.py -H 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 -a sha1 -p Ape$$$%%*
 ```
 
 ## Project structure

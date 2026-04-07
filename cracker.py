@@ -80,6 +80,7 @@ def crack_hash_pattern(target_hash, pattern, algorithm):
     charsets = krunch_init(pattern)
 
     for password in product(*charsets):
+        password = "".join(password)
         print(f"Trying: {password:<30}", end="\r")
         if verify_password(password, target_hash, algorithm):
             print(" " * 50, end="\r")

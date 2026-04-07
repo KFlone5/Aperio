@@ -18,24 +18,13 @@ jobs:
         with:
           python-version: "3.x"
 
-      - run: pip install -r requirements.txt pyinstaller
+      - run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
 
-      - run: pyinstaller --onefile main.py --name Aperio
+      - run: pyinstaller --onefile Aperio.py --name Aperio
 
-      - if: matrix.os == 'windows-latest'
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
-          name: Aperio-windows
-          path: dist/Aperio.exe
-
-      - if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: Aperio-linux
-          path: dist/Aperio
-
-      - if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: Aperio-macos
-          path: dist/Aperio
+          name: Aperio-${{ matrix.os }}
+          path: dist/Aperio*

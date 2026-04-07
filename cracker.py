@@ -21,7 +21,6 @@ ALL_CHARSET = (LOW_CHARSET + UPP_CHARSET + NUM_CHARSET + SYM_CHARSET)
 
 def krunch_init(pattern, strings=""):
     total_passwords = 1
-    password_length = len(pattern)
     charsets = []
 
     for char in pattern:
@@ -79,7 +78,6 @@ def crack_hash(target_hash, wordlist_path, algorithm):
 
 def crack_hash_pattern(target_hash, pattern, algorithm):
     charsets = krunch_init(pattern)
-    count = 0
 
     for password in product(*charsets):
         print(f"Trying: {password:<30}", end="\r")

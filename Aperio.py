@@ -72,7 +72,7 @@ def main():
     else:
         print(f"Pattern:   {args.pattern}")
         print(f"\nStarting crack...\n")
-        result = crack_hash_pattern(args.hash, args.wordlist, args.algorithm)
+        result = crack_hash_pattern(args.hash, args.pattern, args.algorithm)
     
     if result:
         print(f"Password found: {result}")

@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ## Usage
 
 ```
-python main.py -H <hash> -a <algorithm> -w <wordlist> -p <pattern>
+python Aperio.py -H <hash> -a <algorithm> -w <wordlist> -p <pattern>
 ```
 
 ### Arguments

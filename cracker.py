@@ -43,6 +43,7 @@ def krunch_init(pattern, strings=""):
             total_passwords *= len(UPP_CHARSET)
             charsets.append(UPP_CHARSET)
         elif char == "*":
+            total_passwords *= len(ALL_CHARSET)
             charsets.append(ALL_CHARSET)
         else:
             charsets.append(char)

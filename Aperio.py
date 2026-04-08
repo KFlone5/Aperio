@@ -1,5 +1,6 @@
 import argparse
 import sys
+import time
 from cracker import crack_hash, crack_hash_pattern, HASHLIB_ALGORITHMS, CRYPT_ALGORITHMS
 
 ALL_ALGORITHMS = HASHLIB_ALGORITHMS | CRYPT_ALGORITHMS
@@ -53,7 +54,8 @@ def main():
     print(f"Hash:      {args.hash}")
     print(f"Algorithm: {args.algorithm}")
     print(f"Processes: {args.threads}")
- 
+
+    start = time.perf_counter()
     if args.wordlist:
         print(f"Wordlist:  {args.wordlist}")
         print(f"\nStarting crack...\n")
@@ -63,10 +65,12 @@ def main():
         print(f"\nStarting crack...\n")
         result = crack_hash_pattern(args.hash, args.pattern, args.algorithm, args.threads)
     
+    end = time.perf_counter()
     if result:
         print(f"Password found: {result}")
     else:
         print("Password not found.")
+    print(f"Time taken: {end-start}")
 
 
 if __name__ == "__main__":

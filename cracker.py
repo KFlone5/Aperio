@@ -75,10 +75,15 @@ def crack_hash(target_hash, wordlist_path, algorithm, threads=1):
             if threads <= 1:
                 for line in file:
                     password = line.strip()
-                    if not password: continue
-                    print(f"Trying: {password:<30}", end="\r")
+                    if not password:
+                        continue
+                    
+                    # Limit display length and pad with spaces to prevent line wrapping
+                    display_password = password[:50]
+                    print(f"Trying: {display_password:<60}", end="\r")
+                    
                     if verify_password((password, target_hash, algorithm)):
-                        print(" " * 50, end="\r")
+                        print(" " * 70, end="\r")
                         return password
             else:
                 # creating a "conveyor" of tasks
@@ -101,8 +106,12 @@ def crack_hash_pattern(target_hash, pattern, algorithm, threads=1):
     if threads <= 1:
         for combo in combinations:
             password = "".join(combo)
-            print(f"Trying: {password:<30}", end="\r")
+            
+            display_password = password[:50]
+            print(f"Trying: {display_password:<60}", end="\r")
+            
             if verify_password((password, target_hash, algorithm)):
+                print(" " * 70, end="\r")
                 return password
     else:
         # Creating tasks on the fly

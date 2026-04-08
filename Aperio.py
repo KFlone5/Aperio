@@ -20,6 +20,7 @@ def parse_args():
     parser.add_argument(
         "-a", "--algorithm",
         required = True,
+        type = str.lower, # To make the input lower, if it was inputed as uppercase
         choices = ALL_ALGORITHMS,
         metavar = "ALGORITHM",
         help = f"Hashing algorithm to use. Available: {', '.join(sorted(ALL_ALGORITHMS))}"

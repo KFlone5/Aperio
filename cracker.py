@@ -94,12 +94,17 @@ def crack_hash(target_hash, wordlist_path, algorithm, threads=1):
                     # chunksize=1000 is how much passwords need to geve each process
                     for result in pool.imap_unordered(verify_password, task_generator, chunksize=1000):
                         count += 1
-                        if count % 100000 == 0:
-                            print(f"{count} passwords checked", end="\r")
+                        if count % 1000 == 0:
+                            print(f"{count:,} passwords checked", end="\r")
 
                         if result:
+                            print(" " * 70, end="\r") # Clears the line
+                            print(f"Total passwords checked: {count:,}")
                             pool.terminate()
                             return result
+        
+        print(" " * 70, end="\r")
+        print(f"Total passwords checked: {count:,}")
     except FileNotFoundError:
         print(f"Wordlist file not found: {wordlist_path}")
     return None
@@ -107,6 +112,7 @@ def crack_hash(target_hash, wordlist_path, algorithm, threads=1):
 def crack_hash_pattern(target_hash, pattern, algorithm, threads=1):
     charsets = krunch_init(pattern)
     combinations = product(*charsets)
+    count = 0
 
     if threads <= 1:
         for combo in combinations:
@@ -126,7 +132,15 @@ def crack_hash_pattern(target_hash, pattern, algorithm, threads=1):
         
         with multiprocessing.Pool(processes=threads) as pool:
             for result in pool.imap_unordered(verify_password, combo_generator(), chunksize=1000):
+                count += 1
+                if count % 1000 == 0:
+                    print(f"{count:,} passwords checked", end="\r")
+
                 if result:
+                    print(" " * 70, end="\r")
+                    print(f"Total passwords checked: {count:,}")
                     pool.terminate()
                     return result
+    print(" " * 70, end="\r")
+    print(f"Total passwords checked: {count:,}")
     return None

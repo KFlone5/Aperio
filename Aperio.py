@@ -23,7 +23,6 @@ def parse_args():
     parser.add_argument("-w", "--wordlist", help="Path to wordlist file")
     parser.add_argument("-p", "--pattern", help="Pattern for Krunch on-the-fly")
     
-    # Новый аргумент для многопроцессорности
     parser.add_argument(
         "-t", "--threads",
         type=int,

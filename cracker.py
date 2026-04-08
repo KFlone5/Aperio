@@ -19,6 +19,12 @@ NUM_CHARSET = "0123456789"
 SYM_CHARSET = "!@#$%^&*()-_+=~`[]{}|\\:;\"'<>,.?/"
 ALL_CHARSET = (LOW_CHARSET + UPP_CHARSET + NUM_CHARSET + SYM_CHARSET)
 
+# A help function that creates ONE task at a time
+def get_next_task(opened_file, target_hash, algorithm):
+    for line in opened_file:
+        password = line.strip()
+        if password:
+            yield (password, target_hash, algorithm)
 
 def verify_password(task):
     password, target_hash, algorithm = task
@@ -67,27 +73,20 @@ def crack_hash(target_hash, wordlist_path, algorithm, threads=1):
     try:
         with open(wordlist_path, "r", encoding="utf-8", errors="ignore") as file:
             if threads <= 1:
-                # Single thread
                 for line in file:
                     password = line.strip()
-                    if not password:
-                        continue
+                    if not password: continue
                     print(f"Trying: {password:<30}", end="\r")
                     if verify_password((password, target_hash, algorithm)):
                         print(" " * 50, end="\r")
                         return password
             else:
-                # Multi Thread with creation of task
-                tasks = []
-                for line in file:
-                    password = line.strip()
-                    if password:
-                        # Collecting data into a single task
-                        new_task = (password, target_hash, algorithm)
-                        tasks.append(new_task)
+                # creating a "conveyor" of tasks
+                task_generator = get_next_task(file, target_hash, algorithm)
                 
                 with multiprocessing.Pool(processes=threads) as pool:
-                    for result in pool.imap_unordered(verify_password, tasks, chunksize=1000):
+                    # chunksize=1000 is how much passwords need to geve each process
+                    for result in pool.imap_unordered(verify_password, task_generator, chunksize=1000):
                         if result:
                             pool.terminate()
                             return result
@@ -99,24 +98,20 @@ def crack_hash_pattern(target_hash, pattern, algorithm, threads=1):
     charsets = krunch_init(pattern)
     combinations = product(*charsets)
 
-    # Single Thread
     if threads <= 1:
         for combo in combinations:
             password = "".join(combo)
             print(f"Trying: {password:<30}", end="\r")
             if verify_password((password, target_hash, algorithm)):
-                print(" " * 50, end="\r")
                 return password
     else:
-        # Multi Thread
-        tasks = []
-        for combo in combinations:
-            password = "".join(combo)
-            new_task = (password, target_hash, algorithm)
-            tasks.append(new_task)
-            
+        # Creating tasks on the fly
+        def combo_generator():
+            for combo in combinations:
+                yield ("".join(combo), target_hash, algorithm)
+        
         with multiprocessing.Pool(processes=threads) as pool:
-            for result in pool.imap_unordered(verify_password, tasks, chunksize=1000):
+            for result in pool.imap_unordered(verify_password, combo_generator(), chunksize=1000):
                 if result:
                     pool.terminate()
                     return result

@@ -95,12 +95,29 @@ def crack_hash(target_hash, wordlist_path, algorithm, threads=1):
         print(f"Wordlist file not found: {wordlist_path}")
     return None
 
-def crack_hash_pattern(target_hash, pattern, algorithm):
+def crack_hash_pattern(target_hash, pattern, algorithm, threads=1):
     charsets = krunch_init(pattern)
+    combinations = product(*charsets)
 
-    for password in product(*charsets):
-        password = "".join(password)
-        print(f"Trying: {password:<30}", end="\r")
-        if verify_password(password, target_hash, algorithm):
-            print(" " * 50, end="\r")
-            return password
+    # Single Thread
+    if threads <= 1:
+        for combo in combinations:
+            password = "".join(combo)
+            print(f"Trying: {password:<30}", end="\r")
+            if verify_password((password, target_hash, algorithm)):
+                print(" " * 50, end="\r")
+                return password
+    else:
+        # Multi Thread
+        tasks = []
+        for combo in combinations:
+            password = "".join(combo)
+            new_task = (password, target_hash, algorithm)
+            tasks.append(new_task)
+            
+        with multiprocessing.Pool(processes=threads) as pool:
+            for result in pool.imap_unordered(verify_password, tasks, chunksize=1000):
+                if result:
+                    pool.terminate()
+                    return result
+    return None

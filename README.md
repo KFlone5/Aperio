@@ -1,6 +1,6 @@
 # Aperio
 
-A wordlist-based hash cracker written in Python.
+A wordlist-based and pattern-based hash bruteforcer written in Python with multi-processing support.
 
 ## Supported algorithms
 
@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ## Usage
 
 ```
-python Aperio.py -H <hash> -a <algorithm> -w <wordlist> -p <pattern>
+python Aperio.py -H <hash> -a <algorithm> -w <wordlist> -p <pattern> -t <threads>
 ```
 
 ### Arguments
@@ -28,6 +28,7 @@ python Aperio.py -H <hash> -a <algorithm> -w <wordlist> -p <pattern>
 | `-a`, `--algorithm` | Hashing algorithm used |
 | `-w`, `--wordlist` | Path to wordlist file |
 | `-p`, `--pattern` | Pattern for the password on-the-fly generation |
+| `-t`, `--threads` | Number of threads |
 
 ### Examples
 
@@ -36,12 +37,16 @@ python Aperio.py -H 5f4dcc3b5aa765d61d8327deb882cf99 -a md5 -w /usr/share/wordli
 ```
 
 ```
-python Aperio.py -H 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 -a sha1 -w wordlist.txt
+python Aperio.py -H 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 -a sha1 -w wordlist.txt -t 16
 ```
 
 ```
-python Aperio.py -H 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 -a sha1 -p Ape$$$%%*
+python Aperio.py -H 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8 -a sha1 -p Ape$$$%%* -t 16
 ```
+
+> **Note:** For optimal performance and stability on Windows, set `-t` to your CPU's logical core count and avoid exceeding 60 due to OS handle limits.
+
+## Project structure
 
 ## Project structure
 

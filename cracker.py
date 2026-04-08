@@ -88,10 +88,15 @@ def crack_hash(target_hash, wordlist_path, algorithm, threads=1):
             else:
                 # creating a "conveyor" of tasks
                 task_generator = get_next_task(file, target_hash, algorithm)
+                count = 0
                 
                 with multiprocessing.Pool(processes=threads) as pool:
                     # chunksize=1000 is how much passwords need to geve each process
                     for result in pool.imap_unordered(verify_password, task_generator, chunksize=1000):
+                        count += 1
+                        if count % 100000 == 0:
+                            print(f"{count} passwords checked", end="\r")
+
                         if result:
                             pool.terminate()
                             return result

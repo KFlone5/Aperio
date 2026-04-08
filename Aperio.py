@@ -70,7 +70,7 @@ def main():
         print(f"Password found: {result}")
     else:
         print("Password not found.")
-    print(f"Time taken: {end-start}")
+    print(f"Time taken: {(end-start):.2f} seconds")
 
 
 if __name__ == "__main__":
